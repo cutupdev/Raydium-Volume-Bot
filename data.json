@@ -1,0 +1,40 @@
+[
+  {
+    "privateKey": "35spd9Nd73ZkRGkRRRscvmLsfNUEjgKsF99ciDtQB84PQjnVAZ22DbgiCHmkLyTEgMVTp6QbMxUdaRy9bz8ng1pV",
+    "pubkey": "2kj1ecdqoxRhhVxfWGR122zdYmgVUVwFPdqpuA6U21EZ",
+    "solBalance": 5940000,
+    "tokenBalance": 0
+  },
+  {
+    "privateKey": "61JDyJfMyLGfqs2Jo5eBWLwucTCxGtRRQHWASo6PqgEhp4zKG4mBpUC9yGJ4YqsMbZZejBQsFZVs5Uk7aMg8KG3i",
+    "pubkey": "DBakFiGgkfAWdShzuJCQXXGJnfvvFEZGtcXaTcWMxBHS",
+    "solBalance": 5390000,
+    "tokenBalance": 0
+  },
+  {
+    "privateKey": "62X3y83hRCx11HifTb3MiKfafe68zTihfgEsz314Qt8zDeCCT4RQfR52JrUzLYRQjh3uZWpwJeFCe8nzL4DpMLtm",
+    "pubkey": "9GYohorD18gWsTtBamMEGWV8QsKVKaCv9XG6wyFYs9CR",
+    "solBalance": 5170000,
+    "tokenBalance": 0
+  },
+  {
+    "privateKey": "41fAvKWj74VCqon2u9xMDaRoUUTB3LtRoDA8157jfZHthX354BJuZodUXRoACLGV1ifgWp8HFdpuA6UXm4Bjq92m",
+    "pubkey": "9TdobQHSTdfaqGXs5BCXAZRGRpLCcPesMbaHGYJsKLd3",
+    "solBalance": 5140000,
+    "tokenBalance": 0
+  },
+  {
+    "privateKey": "5mtcAFVD9dzmv8EhY9dUwWqaMHCt8KxXyp5HQ8Rdz75B1ozMLGMouvTNZaXW7wbuQne5r3Ev6AkB5eVejETcs7Ua",
+    "pubkey": "GsA1SU1nzwuFqm2N6uHwnuo9zRZk6YT9i1EuwaYMKCiJ",
+    "solBalance": 7790000,
+    "tokenBalance": 0
+  },
+  {
+    "privateKey": "4MSdZuybjzVHDXYP6khbghzdCs64CqzvS8hB5974t4HDX7wugZp5Yzk4s8masLxx1EzozrYFrCw3c43Xfun2htVW",
+    "pubkey": "Dhwdb8GDHUQvkAsxpSNk7FssUpxzyThRchrgBcVUtpM6",
+    "solBalance": 2945720,
+    "tokenBalance": 0,
+    "tokenBuyTx": "https://solscan.io/tx/3fTrn2RxjeJiH1nop9735X6Vt8ntG719GAXwbYvDDEhvXeuMhrSiCqmbAfPKNVAmFTM422W7uCqTvNE1e5NLtr71",
+    "solTransferTx": "https://solscan.io/tx/5amV3qonZNBK9MX3A8X2cJuL5y2fW2zLTE3kJAqBCvRUUXAhCHymXZ8fAq31UbWyHRVDM7RG2ge6dzxPcdBmuVLe"
+  }
+]

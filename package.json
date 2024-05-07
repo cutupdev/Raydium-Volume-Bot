@@ -1,9 +1,7 @@
 {
-  "name": "solana-sniper-bot",
-  "author": "Filip Dundjer",
+  "name": "volume-bot",
   "scripts": {
-    "buy": "ts-node buy.ts",
-    "sell": "ts-node sell.ts",
+    "start": "ts-node index.ts",
     "tsc": "tsc --noEmit"
   },
   "dependencies": {

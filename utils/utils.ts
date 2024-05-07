@@ -14,8 +14,6 @@ export const retrieveEnvVariable = (variableName: string, logger: Logger) => {
 };
 
 
-
-
 export const randVal = (min: number, max: number, count: number, total: number, isEven: boolean): number[] => {
 
   const arr: number[] = Array(count).fill(total / count);
@@ -45,28 +43,31 @@ interface UserData {
   privateKey: string;
   tokenBalance: number;
   solBalance: number;
+  solTransferTx: string;
+  tokenBuyTx: string;
 }
 
 export const saveDataToFile = (newData: UserData, filePath: string = "data.json") => {
   try {
-      let existingData: UserData[] = [];
+    console.log("Save data invoked")
+    let existingData: UserData[] = [];
 
-      // Check if the file exists
-      if (fs.existsSync(filePath)) {
-          // If the file exists, read its content
-          const fileContent = fs.readFileSync(filePath, 'utf-8');
-          existingData = JSON.parse(fileContent);
-      }
+    // Check if the file exists
+    if (fs.existsSync(filePath)) {
+      // If the file exists, read its content
+      const fileContent = fs.readFileSync(filePath, 'utf-8');
+      existingData = JSON.parse(fileContent);
+    }
 
-      // Add the new data to the existing array
-      existingData.push(newData);
+    // Add the new data to the existing array
+    existingData.push(newData);
 
-      // Write the updated data back to the file
-      fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
+    // Write the updated data back to the file
+    fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
 
-      console.log('Data saved to JSON file successfully.');
+    console.log('Data saved to JSON file successfully.');
   } catch (error) {
-      console.error('Error saving data to JSON file:', error);
+    console.error('Error saving data to JSON file:', error);
   }
 };
 

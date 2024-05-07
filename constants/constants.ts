@@ -1,4 +1,3 @@
-import { Commitment } from "@solana/web3.js"
 import { logger, retrieveEnvVariable } from "../utils"
 
 export const PRIVATE_KEY = retrieveEnvVariable('PRIVATE_KEY', logger)
@@ -18,6 +17,7 @@ export const BUY_INTERVAL = Number(retrieveEnvVariable('BUY_INTERVAL', logger))
 // export const PRICE_CHECK_INTERVAL = Number(retrieveEnvVariable('PRICE_CHECK_INTERVAL', logger))
 
 export const TOKEN_MINT = retrieveEnvVariable('TOKEN_MINT', logger)
+export const POOL_ID = retrieveEnvVariable('POOL_ID', logger)
 
 export const BLOCKENGINE_URL = retrieveEnvVariable('BLOCKENGINE_URL', logger)
 // export const JITO_MODE = retrieveEnvVariable('JITO_MODE', logger) === 'true'

@@ -1,5 +1,5 @@
 import { Connection, VersionedTransaction } from "@solana/web3.js";
-import { COMMITMENT_LEVEL, RPC_ENDPOINT, RPC_WEBSOCKET_ENDPOINT } from "../constants";
+import { RPC_ENDPOINT, RPC_WEBSOCKET_ENDPOINT } from "../constants";
 import { logger } from "../utils";
 
 
@@ -13,9 +13,7 @@ export const execute = async (transaction: VersionedTransaction, latestBlockhash
     wsEndpoint: RPC_WEBSOCKET_ENDPOINT,
   })
 
-  const signature = await solanaConnection.sendRawTransaction(transaction.serialize(), {
-    preflightCommitment: COMMITMENT_LEVEL,
-  })
+  const signature = await solanaConnection.sendRawTransaction(transaction.serialize())
 
   logger.debug({ signature }, 'Confirming transaction...');
 
@@ -24,14 +22,14 @@ export const execute = async (transaction: VersionedTransaction, latestBlockhash
       signature,
       lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
       blockhash: latestBlockhash.blockhash,
-    },
-    COMMITMENT_LEVEL,
+    }
   );
 
-  if(confirmation.value.err) {
+  if (confirmation.value.err) {
     logger.warn("Confrimtaion error")
-    return
+    return ""
   } else {
-    logger.info("https://solscan.io/tx/", signature)
+    logger.info(`Success in buy transaction: https://solscan.io/tx/${signature}`)
   }
+  return signature
 }
