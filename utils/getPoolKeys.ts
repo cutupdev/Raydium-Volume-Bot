@@ -1,9 +1,7 @@
-import { ASSOCIATED_TOKEN_PROGRAM_ID, Liquidity, LiquidityPoolKeysV4, MARKET_STATE_LAYOUT_V3, Market, TOKEN_PROGRAM_ID } from "@raydium-io/raydium-sdk";
+import { Liquidity, LiquidityPoolKeysV4, MARKET_STATE_LAYOUT_V3, Market } from "@raydium-io/raydium-sdk";
 import { Commitment, Connection, PublicKey } from "@solana/web3.js";
-import splToken from '@solana/spl-token';
 
 import dotenv from 'dotenv'
-import { RPC_ENDPOINT, RPC_WEBSOCKET_ENDPOINT } from "../constants";
 dotenv.config();
 
 export class PoolKeys {

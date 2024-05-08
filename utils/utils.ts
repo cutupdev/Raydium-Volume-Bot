@@ -1,6 +1,7 @@
 import { Logger } from 'pino';
 import dotenv from 'dotenv';
 import fs from 'fs';
+import { logger } from './logger';
 
 dotenv.config();
 
@@ -41,10 +42,8 @@ export const randVal = (min: number, max: number, count: number, total: number, 
 interface UserData {
   pubkey: string;
   privateKey: string;
-  tokenBalance: number;
   solBalance: number;
   solTransferTx: string;
-  tokenBuyTx: string;
 }
 
 export const saveDataToFile = (newData: UserData, filePath: string = "data.json") => {
@@ -65,12 +64,19 @@ export const saveDataToFile = (newData: UserData, filePath: string = "data.json"
     // Write the updated data back to the file
     fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
 
-    console.log('Data saved to JSON file successfully.');
   } catch (error) {
-    console.error('Error saving data to JSON file:', error);
+    logger.error('Error saving data to JSON file:', error);
   }
 };
 
 export const sleep = async (ms: number) => {
   await new Promise((resolve) => setTimeout(resolve, ms))
+}
+
+
+function deleteConsoleLines(numLines: number) {
+  for (let i = 0; i < numLines; i++) {
+    process.stdout.moveCursor(0, -1); // Move cursor up one line
+    process.stdout.clearLine(-1);        // Clear the line
+  }
 }
