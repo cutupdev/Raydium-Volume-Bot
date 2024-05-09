@@ -16,7 +16,9 @@ import {
   TokenAccount,
   TxVersion,
   buildSimpleTransaction,
-  LOOKUP_TABLE_CACHE
+  LOOKUP_TABLE_CACHE,
+  CurrencyAmount,
+  Currency
 } from '@raydium-io/raydium-sdk';
 
 import {
@@ -128,6 +130,48 @@ export async function getBuyTx(solanaConnection: Connection, wallet: Keypair, ba
   }
   return null
 }
+
+export async function getSellTx(solanaConnection: Connection, wallet: Keypair, baseMint: PublicKey, quoteMint: PublicKey, amount: number, targetPool: string) {
+
+  const baseInfo = await getMint(solanaConnection, baseMint)
+  if (baseInfo == null) {
+    logger.error(`Error in getting token decimals`)
+    return null
+  }
+
+  const baseDecimal = baseInfo.decimals
+
+  const baseToken = new Token(TOKEN_PROGRAM_ID, baseMint, baseDecimal)
+  const quoteToken = new Token(TOKEN_PROGRAM_ID, quoteMint, 9)
+  const baseTokenAmount = new TokenAmount(baseToken, Math.round(amount * 10 ** baseDecimal))
+  const slippage = new Percent(100, 100)
+  const walletTokenAccounts = await getWalletTokenAccount(solanaConnection, wallet.publicKey)
+
+  const instructions = await swapOnlyAmm(solanaConnection, {
+    outputToken: quoteToken,
+    targetPool,
+    inputTokenAmount: baseTokenAmount,
+    slippage,
+    walletTokenAccounts,
+    wallet: wallet,
+  })
+
+  const willSendTx = (await buildSimpleTransaction({
+    connection: solanaConnection,
+    makeTxVersion: TxVersion.V0,
+    payer: wallet.publicKey,
+    innerTransactions: instructions,
+    addLookupTableInfo: LOOKUP_TABLE_CACHE
+  }))[0]
+  if (willSendTx instanceof VersionedTransaction) {
+    willSendTx.sign([wallet])
+    // await bundle([willSendTx], wallet)
+    return willSendTx
+  }
+  return null
+}
+
+
 
 export async function formatAmmKeysById(connection: Connection, id: string): Promise<ApiPoolInfoV4> {
   const account = await connection.getAccountInfo(new PublicKey(id))

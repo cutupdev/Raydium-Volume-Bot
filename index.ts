@@ -30,11 +30,12 @@ import {
   PRIVATE_KEY,
   RPC_ENDPOINT,
   RPC_WEBSOCKET_ENDPOINT,
-  TOKEN_MINT
+  TOKEN_MINT,
+  TX_FEE
 } from './constants'
 import { logger, PoolKeys, saveDataToFile, sleep } from './utils'
 import base58 from 'bs58'
-import { getBuyTx } from './utils/swapOnlyAmm'
+import { getBuyTx, getSellTx } from './utils/swapOnlyAmm'
 import { execute } from './executor/legacy'
 
 const solanaConnection = new Connection(RPC_ENDPOINT, {
@@ -77,7 +78,7 @@ const main = async () => {
   // trackRaydium()
 }
 
-const buy = async (newWallet: Keypair, buyAmount: number, poolId: PublicKey) => {
+const buy = async (newWallet: Keypair, buyAmount: number, poolId: PublicKey, needToSell: boolean) => {
   const solBalance = await solanaConnection.getBalance(newWallet.publicKey)
   if (!solBalance || solBalance == 0) {
     logger.error("error: sol transferrred, but not confiremd yet")
@@ -93,6 +94,23 @@ const buy = async (newWallet: Keypair, buyAmount: number, poolId: PublicKey) => 
     const txSig = await execute(tx, latestBlockhash)
     tokenBuyTx = txSig ? `https://solscan.io/tx/${txSig}` : ''
 
+    if (needToSell) {
+      try {
+
+
+        const sellTx = await getSellTx(solanaConnection, newWallet, baseMint, NATIVE_MINT, buyAmount / 2, poolId.toBase58())
+        if (sellTx == null) {
+          logger.error(`Error getting buy transaction`)
+          return null
+        }
+        const latestBlockhashForSell = await solanaConnection.getLatestBlockhash()
+        const txSellSig = await execute(sellTx, latestBlockhashForSell, false)
+        const tokenSellTx = txSig ? `https://solscan.io/tx/${txSellSig}` : ''
+      } catch (error) {
+        console.log("🚀 ~ sell error:", error)
+        logger.error("Failed to sell token")
+      }
+    }
   } catch (error) {
     logger.error("Error in buying token")
     tokenBuyTx = ""
@@ -136,8 +154,8 @@ const distributeSol = async (mainKp: Keypair, distritbutionNum: number) => {
   const wallets: WalletInfo[] = []
   try {
     const sendSolTx = new Transaction().add(
-      ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 80_000_000 }),
-      ComputeBudgetProgram.setComputeUnitLimit({ units: 6_000 })
+      ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 10_000 * TX_FEE }),
+      ComputeBudgetProgram.setComputeUnitLimit({ units: 5_000 })
     )
     for (let i = 0; i < distritbutionNum; i++) {
       let buyAmount: number
@@ -185,19 +203,25 @@ const distAndBuy = async (poolId: PublicKey) => {
         return
       }
       const { wallets, sig } = info
-      for (let j = 0; j < distritbutionNum; j++) {
-        await sleep(BUY_INTERVAL)
-        const { kp: newWallet, amount } = wallets[j]
-        buy(newWallet, amount, poolId)
-      }
       wallets.map(wallet => saveDataToFile({
         privateKey: base58.encode(wallet.kp.secretKey),
         pubkey: wallet.kp.publicKey.toBase58(),
         solBalance: wallet.amount + 0.005,
         solTransferTx: sig,
       }))
+      for (let j = 0; j < distritbutionNum; j++) {
+        try {
+          await sleep(BUY_INTERVAL)
+          const { kp: newWallet, amount } = wallets[j]
+          const needToSell = j % 2 == 1
+          buy(newWallet, amount, poolId, needToSell)
+        } catch (error) {
+          logger.error("Failed to buy token")
+        }
+      }
+
     } catch (error) {
-      logger.error("Failed to dis")
+      logger.error("Failed to distribute")
     }
   }
 }
@@ -290,7 +314,7 @@ const getPoolStatus = async (poolId: PublicKey) => {
       logger.warn(`\t Volume status                  =>   m5: $${volume.m5}\t|\th1: $${volume.h1}\t|\th6: $${volume.h6}\t|\t h24: $${volume.h24}`)
       logger.warn(`\t Recent buy status (buy / sell) =>   m5: ${txns.m5.buys} / ${txns.m5.sells}\t\t|\th1: ${txns.h1.buys} / ${txns.h1.sells}\t|\th6: ${txns.h6.buys} / ${txns.h6.sells}\t|\t h24: ${txns.h24.buys} / ${txns.h24.sells}`)
       logger.warn(`\t volume price change            =>   m5: ${priceChange.m5}%\t\t|\th1: ${priceChange.h1}%\t|\th6: ${priceChange.h6}%\t|\t h24: ${priceChange.h24}%`)
-     
+
       await sleep(5000)
     } catch (error) {
       logger.error("Error fetching ")

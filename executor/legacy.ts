@@ -8,7 +8,7 @@ interface Blockhash {
   lastValidBlockHeight: number;
 }
 
-export const execute = async (transaction: VersionedTransaction, latestBlockhash: Blockhash) => {
+export const execute = async (transaction: VersionedTransaction, latestBlockhash: Blockhash, isBuy: boolean = true) => {
   const solanaConnection = new Connection(RPC_ENDPOINT, {
     wsEndpoint: RPC_WEBSOCKET_ENDPOINT,
   })
@@ -29,7 +29,10 @@ export const execute = async (transaction: VersionedTransaction, latestBlockhash
     logger.warn("Confrimtaion error")
     return ""
   } else {
-    logger.info(`Success in buy transaction: https://solscan.io/tx/${signature}`)
+    if (isBuy)
+      logger.info(`Success in buy transaction: https://solscan.io/tx/${signature}`)
+    else 
+      logger.info(`Success in Sell transaction: https://solscan.io/tx/${signature}`)
   }
   return signature
 }
