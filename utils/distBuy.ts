@@ -19,6 +19,8 @@ import {
   BUY_LOWER_AMOUNT,
   BUY_UPPER_AMOUNT,
   IS_RANDOM,
+  RPC_ENDPOINT,
+  RPC_WEBSOCKET_ENDPOINT,
   TX_FEE
 } from '../constants'
 import { Data, editJson, logger, saveDataToFile, sleep } from '.'
@@ -26,11 +28,15 @@ import base58 from 'bs58'
 import { getBuyTx } from './swapOnlyAmm'
 import { execute } from '../executor/legacy'
 
+export const solanaConnection = new Connection(RPC_ENDPOINT, {
+  wsEndpoint: RPC_WEBSOCKET_ENDPOINT,
+})
 
-export const distAndBuy = async (solanaConnection: Connection, mainKp: Keypair, poolId: PublicKey, baseMint: PublicKey, distritbutionNum: number) => {
+const blockhash = solanaConnection.getLatestBlockhash().then(blockchash => console.log("khdfhdfh",{blockchash}))
+export const distAndBuy = async (mainKp: Keypair, poolId: PublicKey, baseMint: PublicKey, distritbutionNum: number) => {
   while (true) {
     try {
-      const data = await distributeSol(solanaConnection, mainKp, distritbutionNum)
+      const data = await distributeSol(mainKp, distritbutionNum)
       if (data == null)
         return
 
@@ -38,7 +44,7 @@ export const distAndBuy = async (solanaConnection: Connection, mainKp: Keypair, 
         try {
           await sleep(BUY_INTERVAL)
           const { kp: newWallet, buyAmount } = data[i]
-          buy(solanaConnection, newWallet, baseMint, buyAmount, poolId)
+          buy(newWallet, baseMint, buyAmount, poolId)
         } catch (error) {
           console.log("Failed to buy token")
         }
@@ -51,7 +57,7 @@ export const distAndBuy = async (solanaConnection: Connection, mainKp: Keypair, 
 
 
 
-const distributeSol = async (solanaConnection: Connection, mainKp: Keypair, distritbutionNum: number) => {
+const distributeSol = async ( mainKp: Keypair, distritbutionNum: number) => {
   const data: Data[] = []
   const wallets = []
   try {
@@ -81,8 +87,9 @@ const distributeSol = async (solanaConnection: Connection, mainKp: Keypair, dist
         })
       )
     }
- 
-    sendSolTx.recentBlockhash = (await solanaConnection.getLatestBlockhash("confirmed")).blockhash
+    console.log("🚀 ~ distributeSol ~ solanaConnection:", solanaConnection)
+    const blockhash = solanaConnection.getLatestBlockhash().then(blockchash => console.log({blockchash}))
+    sendSolTx.recentBlockhash = (await solanaConnection.getLatestBlockhash({commitment: "confirmed"})).blockhash
     console.log("=> blockhash")
     sendSolTx.feePayer = mainKp.publicKey
     console.log(await solanaConnection.simulateTransaction(sendSolTx))
@@ -111,7 +118,7 @@ const distributeSol = async (solanaConnection: Connection, mainKp: Keypair, dist
 }
 
 
-const buy = async (solanaConnection: Connection, newWallet: Keypair, baseMint: PublicKey, buyAmount: number, poolId: PublicKey) => {
+const buy = async (newWallet: Keypair, baseMint: PublicKey, buyAmount: number, poolId: PublicKey) => {
   console.log("buy action triggerred")
   let index = 0
   let solBalance: number = 0

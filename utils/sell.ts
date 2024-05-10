@@ -6,8 +6,9 @@ import { execute } from "../executor/legacy"
 import { Data, editJson, readJson, sleep } from "./utils"
 import base58 from "bs58"
 import { SELL_INTERVAL } from "../constants"
+import { solanaConnection } from ".."
 
-export const sell = async (solanaConnection: Connection, poolId: PublicKey, baseMint: PublicKey) => {
+export const sell = async (poolId: PublicKey, baseMint: PublicKey) => {
   while (true) {
     try {
       const data: Data[] = readJson()

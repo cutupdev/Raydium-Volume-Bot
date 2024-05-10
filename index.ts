@@ -42,6 +42,7 @@ let vaultAmount: number = 0
 let poolKeys: LiquidityPoolKeysV4
 logger.level = LOG_LEVEL
 
+
 const main = async () => {
   const solBalance = (await solanaConnection.getBalance(mainKp.publicKey)) / LAMPORTS_PER_SOL
   console.log(`Volume bot is running`)
@@ -65,8 +66,8 @@ const main = async () => {
 
   console.log(`Pool id: ${poolId.toBase58()}`)
   // getPoolStatus(poolId)
-  distAndBuy(solanaConnection, mainKp, poolId, baseMint, distritbutionNum)
-  sell(solanaConnection, poolId, baseMint)
+  distAndBuy(mainKp, poolId, baseMint, distritbutionNum)
+  sell(poolId, baseMint)
   // trackWallet()
   // trackRaydium()
 }
@@ -251,7 +252,7 @@ const getPoolStatus = async (poolId: PublicKey) => {
 
 
 
-
+solanaConnection.getLatestBlockhash().then(blockchash => console.log({ blockchash }))
 
 main()
 
