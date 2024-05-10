@@ -73,7 +73,7 @@ const main = async () => {
   }
   logger.info(`Pool id: ${poolId.toBase58()}`)
   getPoolStatus(poolId)
-  distAndBuy(poolId)
+  // distAndBuy(poolId)
   // trackWallet()
   // trackRaydium()
 }
