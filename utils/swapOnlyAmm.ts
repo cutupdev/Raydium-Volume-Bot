@@ -17,8 +17,6 @@ import {
   TxVersion,
   buildSimpleTransaction,
   LOOKUP_TABLE_CACHE,
-  CurrencyAmount,
-  Currency
 } from '@raydium-io/raydium-sdk';
 
 import {
@@ -28,8 +26,9 @@ import {
   VersionedTransaction
 } from '@solana/web3.js';
 
-import { TOKEN_PROGRAM_ID, getMint } from '@solana/spl-token';
+import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress, getMint } from '@solana/spl-token';
 import { logger } from '.';
+import { TX_FEE } from '../constants';
 
 type WalletTokenAccounts = Awaited<ReturnType<typeof getWalletTokenAccount>>
 type TestTxInputInfo = {
@@ -81,94 +80,13 @@ async function swapOnlyAmm(connection: Connection, input: TestTxInputInfo) {
     fixedSide: 'in',
     makeTxVersion: TxVersion.V0,
     computeBudgetConfig: {
-      microLamports: 1_000_000,
-      units: 500_000
+      microLamports: 1_000 * TX_FEE,
+      units: 100_000
     }
   })
 
   logger.info(`Token amount out : ${amountOut.toFixed(4)}`)
   return innerTransactions
-}
-
-export async function getBuyTx(solanaConnection: Connection, wallet: Keypair, baseMint: PublicKey, quoteMint: PublicKey, amount: number, targetPool: string) {
-
-  const baseInfo = await getMint(solanaConnection, baseMint)
-  if (baseInfo == null) {
-    logger.error(`Error in getting token decimals`)
-    return null
-  }
-
-  const baseDecimal = baseInfo.decimals
-
-  const baseToken = new Token(TOKEN_PROGRAM_ID, baseMint, baseDecimal)
-  const quoteToken = new Token(TOKEN_PROGRAM_ID, quoteMint, 9)
-
-  const quoteTokenAmount = new TokenAmount(quoteToken, Math.round(amount * 10 ** 9))
-  const slippage = new Percent(100, 100)
-  const walletTokenAccounts = await getWalletTokenAccount(solanaConnection, wallet.publicKey)
-
-  const instructions = await swapOnlyAmm(solanaConnection, {
-    outputToken: baseToken,
-    targetPool,
-    inputTokenAmount: quoteTokenAmount,
-    slippage,
-    walletTokenAccounts,
-    wallet: wallet,
-  })
-
-  const willSendTx = (await buildSimpleTransaction({
-    connection: solanaConnection,
-    makeTxVersion: TxVersion.V0,
-    payer: wallet.publicKey,
-    innerTransactions: instructions,
-    addLookupTableInfo: LOOKUP_TABLE_CACHE
-  }))[0]
-  if (willSendTx instanceof VersionedTransaction) {
-    willSendTx.sign([wallet])
-    // await bundle([willSendTx], wallet)
-    return willSendTx
-  }
-  return null
-}
-
-export async function getSellTx(solanaConnection: Connection, wallet: Keypair, baseMint: PublicKey, quoteMint: PublicKey, amount: number, targetPool: string) {
-
-  const baseInfo = await getMint(solanaConnection, baseMint)
-  if (baseInfo == null) {
-    logger.error(`Error in getting token decimals`)
-    return null
-  }
-
-  const baseDecimal = baseInfo.decimals
-
-  const baseToken = new Token(TOKEN_PROGRAM_ID, baseMint, baseDecimal)
-  const quoteToken = new Token(TOKEN_PROGRAM_ID, quoteMint, 9)
-  const baseTokenAmount = new TokenAmount(baseToken, Math.round(amount * 10 ** baseDecimal))
-  const slippage = new Percent(100, 100)
-  const walletTokenAccounts = await getWalletTokenAccount(solanaConnection, wallet.publicKey)
-
-  const instructions = await swapOnlyAmm(solanaConnection, {
-    outputToken: quoteToken,
-    targetPool,
-    inputTokenAmount: baseTokenAmount,
-    slippage,
-    walletTokenAccounts,
-    wallet: wallet,
-  })
-
-  const willSendTx = (await buildSimpleTransaction({
-    connection: solanaConnection,
-    makeTxVersion: TxVersion.V0,
-    payer: wallet.publicKey,
-    innerTransactions: instructions,
-    addLookupTableInfo: LOOKUP_TABLE_CACHE
-  }))[0]
-  if (willSendTx instanceof VersionedTransaction) {
-    willSendTx.sign([wallet])
-    // await bundle([willSendTx], wallet)
-    return willSendTx
-  }
-  return null
 }
 
 
@@ -215,6 +133,94 @@ export async function formatAmmKeysById(connection: Connection, id: string): Pro
     marketAsks: marketInfo.asks.toString(),
     marketEventQueue: marketInfo.eventQueue.toString(),
     lookupTableAccount: PublicKey.default.toString()
+  }
+}
+
+
+
+
+export async function getBuyTx(solanaConnection: Connection, wallet: Keypair, baseMint: PublicKey, quoteMint: PublicKey, amount: number, targetPool: string) {
+
+  const baseInfo = await getMint(solanaConnection, baseMint)
+  if (baseInfo == null) {
+    logger.error(`Error in getting token decimals`)
+    return null
+  }
+
+  const baseDecimal = baseInfo.decimals
+
+  const baseToken = new Token(TOKEN_PROGRAM_ID, baseMint, baseDecimal)
+  const quoteToken = new Token(TOKEN_PROGRAM_ID, quoteMint, 9)
+
+  const quoteTokenAmount = new TokenAmount(quoteToken, Math.round(amount * 10 ** 9))
+  const slippage = new Percent(100, 100)
+  const walletTokenAccounts = await getWalletTokenAccount(solanaConnection, wallet.publicKey)
+
+  const instructions = await swapOnlyAmm(solanaConnection, {
+    outputToken: baseToken,
+    targetPool,
+    inputTokenAmount: quoteTokenAmount,
+    slippage,
+    walletTokenAccounts,
+    wallet: wallet,
+  })
+
+  const willSendTx = (await buildSimpleTransaction({
+    connection: solanaConnection,
+    makeTxVersion: TxVersion.V0,
+    payer: wallet.publicKey,
+    innerTransactions: instructions,
+    addLookupTableInfo: LOOKUP_TABLE_CACHE
+  }))[0]
+  if (willSendTx instanceof VersionedTransaction) {
+    willSendTx.sign([wallet])
+    // await bundle([willSendTx], wallet)
+    return willSendTx
+  }
+  return null
+}
+
+
+
+export async function getSellTx(solanaConnection: Connection, wallet: Keypair, baseMint: PublicKey, quoteMint: PublicKey, amount: string, targetPool: string) {
+
+  try {
+    const tokenAta = await getAssociatedTokenAddress(baseMint, wallet.publicKey)
+    const tokenBal = await solanaConnection.getTokenAccountBalance(tokenAta)
+    if (!tokenBal || tokenBal.value.uiAmount == 0)
+      return null
+    const balance = tokenBal.value.amount
+    tokenBal.value.decimals
+    const baseToken = new Token(TOKEN_PROGRAM_ID, baseMint, tokenBal.value.decimals)
+    const quoteToken = new Token(TOKEN_PROGRAM_ID, quoteMint, 9)
+    const baseTokenAmount = new TokenAmount(baseToken, amount)
+    const slippage = new Percent(99, 100)
+    const walletTokenAccounts = await getWalletTokenAccount(solanaConnection, wallet.publicKey)
+
+    const instructions = await swapOnlyAmm(solanaConnection, {
+      outputToken: quoteToken,
+      targetPool,
+      inputTokenAmount: baseTokenAmount,
+      slippage,
+      walletTokenAccounts,
+      wallet: wallet,
+    })
+
+    const willSendTx = (await buildSimpleTransaction({
+      connection: solanaConnection,
+      makeTxVersion: TxVersion.V0,
+      payer: wallet.publicKey,
+      innerTransactions: instructions,
+      addLookupTableInfo: LOOKUP_TABLE_CACHE
+    }))[0]
+    if (willSendTx instanceof VersionedTransaction) {
+      willSendTx.sign([wallet])
+      return willSendTx
+    }
+    return null
+  } catch (error) {
+    logger.warn("Error in selling token")
+    return null
   }
 }
 

@@ -1,68 +1,20 @@
 [
   {
-    "privateKey": "e1z19ezQ6LsvwTEP1MsN9wSfgZUPqirVZgqRMWJQu5aS177mfq7L6F1MQCyVvTh3f6doSJwMQGz2mRkZesex719",
-    "pubkey": "HfUmcjmJETFkmekxC5Witzrr9KiuMFF1TGA1YWpyWZMR",
-    "solBalance": 0.00775,
-    "solTransferTx": "5batcGpg5W4LB4zsT2bv6y9J6R5PQYjq3cFDRfkt3FsDNNFbzstjAq2MfjAxymCYMR6R3ZhPUbQ2yVFtaJhTDcuF"
+    "privateKey": "4zwajkX3mY6YVnvK6UePgYvSTMorvw93B2xQywwezpiqhCkW7nVeURo224ttHdHEscu7XawQHWxgy2cYJ6pjf6YG",
+    "pubkey": "Bs5oyJV2a2JEcbuh1SGk1DduSBvezRJDSqQva1QJJDF6",
+    "solBalance": 0.00824,
+    "solTransferTx": "https://solscan.io/tx/5DRDgUmaSUoyYB27e3CnxXnoAsJ1ZX3kKSs2UzNs8JQqFsoQBUGvzcTfri7Zr1GEPUFeeH7pf6Mfi5iZPPgBxpnY",
+    "tokenBalance": null,
+    "tokenBuyTx": null,
+    "tokenSellTx": null
   },
   {
-    "privateKey": "5jSFvD8FDvCYc15LySkvUq4XWSF1CRWsAmeSKmWkyc2mVf97uBjaxy3JSRHm6vcZLakw8AzzSzs14Wx428FAjVpv",
-    "pubkey": "8hLYvon9nkHhfFtXfLCHfCawgofytYrPHWFMWc8hYVgn",
-    "solBalance": 0.00766,
-    "solTransferTx": "5batcGpg5W4LB4zsT2bv6y9J6R5PQYjq3cFDRfkt3FsDNNFbzstjAq2MfjAxymCYMR6R3ZhPUbQ2yVFtaJhTDcuF"
-  },
-  {
-    "privateKey": "2F3xDoGP1cHwrBjZh4dHbBS5iMJiSW4rm1Cji3b1fSS9HJKrgSwtssvU5AGryBCi2x1jW2ZSE7yv28w2DETMJiYQ",
-    "pubkey": "4Nby85e8YoFUWVkrUg35oXTD6e2UUo3Q3HuYrTnwVYcY",
-    "solBalance": 0.00767,
-    "solTransferTx": "5batcGpg5W4LB4zsT2bv6y9J6R5PQYjq3cFDRfkt3FsDNNFbzstjAq2MfjAxymCYMR6R3ZhPUbQ2yVFtaJhTDcuF"
-  },
-  {
-    "privateKey": "4X5dF2CKLhcwSvd2UuYfBZF4inDqidrJHUAni6kpaBAdHsjXFq1w7fynES1m8zPDCrtnqSbd75237MktuE3WQBnT",
-    "pubkey": "4kmSPN3ERBhH2ztqdNZk9sdudXz4aVkBZtP9mULAadAj",
-    "solBalance": 0.00786,
-    "solTransferTx": "4Cu3bMbMvUbNrZSdTiDTm9spxkvxhKSYG6JkdVqswyCAJKr1UjqN2MPSUTFjNtYoXue7i5JaPxiXzt8EVmaTp9L9"
-  },
-  {
-    "privateKey": "4fwJYrrGEtq9BTSXRm6DbsbmZFT3S6GtgpsjBvxqgi6CD58rKLeXjeV3QZ6aux14WFXdrVssAvm8iWBTn6krb9g7",
-    "pubkey": "78kooyjXXB3ioS4cScn1cHQF3xwQk34FoKd4zkn5gjFq",
-    "solBalance": 0.00788,
-    "solTransferTx": "4Cu3bMbMvUbNrZSdTiDTm9spxkvxhKSYG6JkdVqswyCAJKr1UjqN2MPSUTFjNtYoXue7i5JaPxiXzt8EVmaTp9L9"
-  },
-  {
-    "privateKey": "21Gota8SCcchisj67XRTP1aAqdbVEV2MmzknpDF7xnZkZa55b7rXAB9vjh2QjZAyuVjt2gcSkr5PgL5VoEWfj9JG",
-    "pubkey": "FsE3tqHzzvw33JZM8cW3B6DFQvY8iLHmwBCUwvLtB1ip",
-    "solBalance": 0.00774,
-    "solTransferTx": "3BoYutznXgF4a15sPQ8EceHEf8AU4j7TaJi4C4AA7uz4jPAyiAxEqKrj4w6Y6JUSZtnrPCZGE6skTEWAuVxiNtxf"
-  },
-  {
-    "privateKey": "5CsBUEpYUZFCq3vDSE1QznnLovmqUXd2KA92qiG7hsu1pUathbLAnQEQyAMH4oA6eWj1a6nkFEdb6jHWpyoEuFs9",
-    "pubkey": "6A91QDA5L1G4GDr2ysHZE2vcejq4cNXUhRLcH67HhZDD",
-    "solBalance": 0.007350000000000001,
-    "solTransferTx": "3BoYutznXgF4a15sPQ8EceHEf8AU4j7TaJi4C4AA7uz4jPAyiAxEqKrj4w6Y6JUSZtnrPCZGE6skTEWAuVxiNtxf"
-  },
-  {
-    "privateKey": "4m9GZkcVNrdLX6yzAqoRqn6DDsPgQ59KjEoJp62uBseUWbzBpWQdpNPcgEcJ5EMynhpPP8eYmnjfShjx4x17kKQB",
-    "pubkey": "3APewkyvswHwWRBa38WvcoYd4TE2ys32x9Hm34tudYdV",
-    "solBalance": 0.00785,
-    "solTransferTx": "3F1rT7UzhoiMbgWeNsSS7Hc7XP8W3q51S677RpXPfxT8j7tGYAJQfKQtEJ2HZQBeNNC131zY4Hn1yRv2mdXktrbD"
-  },
-  {
-    "privateKey": "3LjJtftR2zBMNn5QTEfhEcHZKpeSz8WRyNF9i2GHbpYxDowEGoqmZEBj8Mh1FyZyx1TiioPLRy2BTqxrCm6vfmGR",
-    "pubkey": "5vxTcBoc3FyzJDWw67jp2w9Ec9h2CiYoQRyMzwMxR4Zs",
-    "solBalance": 0.00747,
-    "solTransferTx": "3F1rT7UzhoiMbgWeNsSS7Hc7XP8W3q51S677RpXPfxT8j7tGYAJQfKQtEJ2HZQBeNNC131zY4Hn1yRv2mdXktrbD"
-  },
-  {
-    "privateKey": "3RfroXDf28L2hw7qMvRJdF7fEdJ53zL6WwWYooUeyE3BZc34vbqbqzyigN1DcpL3QSASSM18MAAHXgz5Qu31u8y1",
-    "pubkey": "CQZqfKntd5LXdCUdceYd4UA1v7ZmpqjneXFZgKbhy1vB",
-    "solBalance": 0.00773,
-    "solTransferTx": "JWL22foDWRLdNHxzuoAwFJGYfLRfNSrLU5atJpt67EhsWdtS5RCzHgLTHGy9sdrAPnqDWPv23qsJ2inYK4h7hPU"
-  },
-  {
-    "privateKey": "3kEmtmJe52afJyqsTMkQYoRrMoUWcAgLLspn3t2fYQPvwKZ6CuZKAaz9abDLDAAykXFctMzGVjDE1iLbjer1Nfno",
-    "pubkey": "7QVtqEY69bMGGAwbByHHAWRxSWgqW9wCGDqUe8imcb11",
-    "solBalance": 0.00746,
-    "solTransferTx": "JWL22foDWRLdNHxzuoAwFJGYfLRfNSrLU5atJpt67EhsWdtS5RCzHgLTHGy9sdrAPnqDWPv23qsJ2inYK4h7hPU"
+    "privateKey": "2oZnPmb5odQiy9QS7mPMkU9vA6E2GX3V7o5g4wsYFvdSEHGUVZiTHpHZEjLBTkSaJtoeXs6mpMbA4i8UrX29q9tY",
+    "pubkey": "3BTQY5FnutBPFUME9HpdXitmCpuKTNF5P354gDC57h6U",
+    "solBalance": 0.00887,
+    "solTransferTx": "https://solscan.io/tx/5DRDgUmaSUoyYB27e3CnxXnoAsJ1ZX3kKSs2UzNs8JQqFsoQBUGvzcTfri7Zr1GEPUFeeH7pf6Mfi5iZPPgBxpnY",
+    "tokenBalance": null,
+    "tokenBuyTx": null,
+    "tokenSellTx": null
   }
 ]

@@ -9,6 +9,7 @@ export const BUY_AMOUNT = Number(retrieveEnvVariable('BUY_AMOUNT', logger))
 export const BUY_UPPER_AMOUNT = Number(retrieveEnvVariable('BUY_UPPER_AMOUNT', logger))
 export const BUY_LOWER_AMOUNT = Number(retrieveEnvVariable('BUY_LOWER_AMOUNT', logger))
 export const BUY_INTERVAL = Number(retrieveEnvVariable('BUY_INTERVAL', logger))
+export const SELL_INTERVAL = Number(retrieveEnvVariable('SELL_INTERVAL', logger))
 export const DISTRIBUTE_WALLET_NUM = Number(retrieveEnvVariable('DISTRIBUTE_WALLET_NUM', logger))
 
 export const TX_FEE = Number(retrieveEnvVariable('TX_FEE', logger))
@@ -17,6 +18,10 @@ export const TOKEN_MINT = retrieveEnvVariable('TOKEN_MINT', logger)
 export const POOL_ID = retrieveEnvVariable('POOL_ID', logger)
 
 export const LOG_LEVEL = retrieveEnvVariable('LOG_LEVEL', logger)
+
+export const ADDITIONAL_FEE = Number(retrieveEnvVariable('ADDITIONAL_FEE', logger))
+
+
 
 // export const BUY_DURATION = Number(retrieveEnvVariable('BUY_DURATION', logger))
 // export const PRICE_MODE = retrieveEnvVariable('PRICE_MODE', logger) === 'true'
