@@ -28,11 +28,10 @@ import base58 from 'bs58'
 import { getBuyTx } from './swapOnlyAmm'
 import { execute } from '../executor/legacy'
 
-export const solanaConnection = new Connection(RPC_ENDPOINT, {
+const solanaConnection = new Connection(RPC_ENDPOINT, {
   wsEndpoint: RPC_WEBSOCKET_ENDPOINT,
 })
 
-const blockhash = solanaConnection.getLatestBlockhash().then(blockchash => console.log("khdfhdfh",{blockchash}))
 export const distAndBuy = async (mainKp: Keypair, poolId: PublicKey, baseMint: PublicKey, distritbutionNum: number) => {
   while (true) {
     try {
@@ -56,8 +55,7 @@ export const distAndBuy = async (mainKp: Keypair, poolId: PublicKey, baseMint: P
 }
 
 
-
-const distributeSol = async ( mainKp: Keypair, distritbutionNum: number) => {
+const distributeSol = async (mainKp: Keypair, distritbutionNum: number) => {
   const data: Data[] = []
   const wallets = []
   try {
@@ -87,10 +85,7 @@ const distributeSol = async ( mainKp: Keypair, distritbutionNum: number) => {
         })
       )
     }
-    console.log("🚀 ~ distributeSol ~ solanaConnection:", solanaConnection)
-    const blockhash = solanaConnection.getLatestBlockhash().then(blockchash => console.log({blockchash}))
-    sendSolTx.recentBlockhash = (await solanaConnection.getLatestBlockhash({commitment: "confirmed"})).blockhash
-    console.log("=> blockhash")
+    sendSolTx.recentBlockhash = (await solanaConnection.getLatestBlockhash({ commitment: "confirmed" })).blockhash
     sendSolTx.feePayer = mainKp.publicKey
     console.log(await solanaConnection.simulateTransaction(sendSolTx))
     const sig = await sendAndConfirmTransaction(solanaConnection, sendSolTx, [mainKp], { maxRetries: 10 })

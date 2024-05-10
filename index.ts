@@ -65,9 +65,10 @@ const main = async () => {
   }
 
   console.log(`Pool id: ${poolId.toBase58()}`)
+  
   // getPoolStatus(poolId)
   distAndBuy(mainKp, poolId, baseMint, distritbutionNum)
-  sell(poolId, baseMint)
+  // sell(poolId, baseMint)
   // trackWallet()
   // trackRaydium()
 }
@@ -250,9 +251,6 @@ const getPoolStatus = async (poolId: PublicKey) => {
   }
 }
 
-
-
-solanaConnection.getLatestBlockhash().then(blockchash => console.log({ blockchash }))
 
 main()
 
