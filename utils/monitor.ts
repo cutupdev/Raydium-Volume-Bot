@@ -16,7 +16,7 @@ export const monitor = async (poolId: PublicKey) => {
         })
         const data = await res.clone().json()
         if (data.pair)
-          logger.info(`Token price : ${data.pair.priceNative}SOL / ${data.pair.priceUsd}USD  <<<=====>>> Liquidity: ${data.pair.liquidity.usd}USD / ${data.pair.liquidity.quote}SOL`)
+          console.log(`Token price : ${data.pair.priceNative}SOL / ${data.pair.priceUsd}USD  <<<=====>>> Liquidity: ${data.pair.liquidity.usd}USD / ${data.pair.liquidity.quote}SOL`)
       } catch (e) {
         // console.log("error in fetching price of pool", e)
       }

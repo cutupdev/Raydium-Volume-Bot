@@ -85,7 +85,7 @@ async function swapOnlyAmm(connection: Connection, input: TestTxInputInfo) {
     }
   })
 
-  logger.info(`Token amount out : ${amountOut.toFixed(4)}`)
+  console.log(`Token amount out : ${amountOut.toFixed(4)}`)
   return innerTransactions
 }
 
@@ -143,7 +143,7 @@ export async function getBuyTx(solanaConnection: Connection, wallet: Keypair, ba
 
   const baseInfo = await getMint(solanaConnection, baseMint)
   if (baseInfo == null) {
-    logger.error(`Error in getting token decimals`)
+    console.log(`Error in getting token decimals`)
     return null
   }
 
@@ -219,7 +219,7 @@ export async function getSellTx(solanaConnection: Connection, wallet: Keypair, b
     }
     return null
   } catch (error) {
-    logger.warn("Error in selling token")
+    console.log("Error in selling token")
     return null
   }
 }

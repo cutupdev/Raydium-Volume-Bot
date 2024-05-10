@@ -44,27 +44,27 @@ logger.level = LOG_LEVEL
 
 const main = async () => {
   const solBalance = (await solanaConnection.getBalance(mainKp.publicKey)) / LAMPORTS_PER_SOL
-  logger.info(`Volume bot is running`)
-  logger.info(`Wallet address: ${mainKp.publicKey.toBase58()}`)
-  logger.info(`Pool token mint: ${baseMint.toBase58()}`)
-  logger.info(`Wallet SOL balance: ${solBalance.toFixed(3)}SOL`)
-  logger.info(`Buying interval: ${BUY_INTERVAL}ms`)
-  logger.info(`Buy upper limit amount: ${BUY_UPPER_AMOUNT}SOL`)
-  logger.info(`Buy lower limit amount: ${BUY_LOWER_AMOUNT}SOL`)
-  logger.info(`Distribute SOL to ${distritbutionNum} wallets`)
+  console.log(`Volume bot is running`)
+  console.log(`Wallet address: ${mainKp.publicKey.toBase58()}`)
+  console.log(`Pool token mint: ${baseMint.toBase58()}`)
+  console.log(`Wallet SOL balance: ${solBalance.toFixed(3)}SOL`)
+  console.log(`Buying interval: ${BUY_INTERVAL}ms`)
+  console.log(`Buy upper limit amount: ${BUY_UPPER_AMOUNT}SOL`)
+  console.log(`Buy lower limit amount: ${BUY_LOWER_AMOUNT}SOL`)
+  console.log(`Distribute SOL to ${distritbutionNum} wallets`)
 
   let poolId: PublicKey
   if (POOL_ID == "null") {
     poolKeys = await PoolKeys.fetchPoolKeyInfo(solanaConnection, baseMint, NATIVE_MINT)
     poolId = poolKeys.id
     quoteVault = poolKeys.quoteVault
-    logger.info(`Successfully fetched pool info`)
+    console.log(`Successfully fetched pool info`)
   } else {
     poolId = new PublicKey(POOL_ID)
   }
 
-  logger.info(`Pool id: ${poolId.toBase58()}`)
-  getPoolStatus(poolId)
+  console.log(`Pool id: ${poolId.toBase58()}`)
+  // getPoolStatus(poolId)
   distAndBuy(solanaConnection, mainKp, poolId, baseMint, distritbutionNum)
   sell(solanaConnection, poolId, baseMint)
   // trackWallet()
@@ -79,15 +79,15 @@ const main = async () => {
 //   try {
 //     const ataInfo = await connection.getTokenAccountBalance(baseTokenAta)
 //     if (!ataInfo || !ataInfo.value.uiAmount) {
-//       logger.warn(`No token balance in new wallet`)
+//       console.log(`No token balance in new wallet`)
 //     } else {
 //       tokenBalance = ataInfo.value.uiAmount
 //     }
 //   } catch (error) {
-//     logger.error(`Wallet does not have token bought`)
+//     console.log(`Wallet does not have token bought`)
 //   }
 //   if (!solBalance || solBalance == 0) {
-//     logger.error(`Wallet is not charged with SOL`)
+//     console.log(`Wallet is not charged with SOL`)
 //     return
 //   }
 
@@ -143,11 +143,11 @@ const main = async () => {
 
 //     const sig = await sendAndConfirmTransaction(solanaConnection, sendSolTx, [mainKp], { maxRetries: 10 })
 //     solTransferTx = `https://solscan.io/tx/${sig}`
-//     logger.info(`Success in transferring sol: ${solTransferTx}`)
+//     console.log(`Success in transferring sol: ${solTransferTx}`)
 //     return { sig, wallets }
 
 //   } catch (error) {
-//     logger.error(`Error in transferring SOL`)
+//     console.log(`Error in transferring SOL`)
 //     solTransferTx = ""
 //   }
 // }
@@ -182,11 +182,11 @@ const trackRaydium = async () => {
 
       const newVaultAmount = (await solanaConnection.getTokenAccountBalance(poolState.quoteVault)).value.uiAmount
       if (!newVaultAmount) {
-        logger.error(`Invalid vault info from pool`)
+        console.log(`Invalid vault info from pool`)
         return
       }
       if (vaultAmount > 0 && newVaultAmount > 0) {
-        logger.warn(`Vault increased amount: ${newVaultAmount - vaultAmount}`)
+        console.log(`Vault increased amount: ${newVaultAmount - vaultAmount}`)
         vaultAmount = newVaultAmount
       }
     },
@@ -235,15 +235,15 @@ const getPoolStatus = async (poolId: PublicKey) => {
 
       const { url, priceNative, priceUsd, txns, volume, priceChange } = data.pair
 
-      logger.warn(`\t url: ${url}`)
-      logger.warn(`\t price: ${priceNative} SOL / ${priceUsd} usd`)
-      logger.warn(`\t Volume status                  =>   m5: $${volume.m5}\t|\th1: $${volume.h1}\t|\th6: $${volume.h6}\t|\t h24: $${volume.h24}`)
-      logger.warn(`\t Recent buy status (buy / sell) =>   m5: ${txns.m5.buys} / ${txns.m5.sells}\t\t|\th1: ${txns.h1.buys} / ${txns.h1.sells}\t|\th6: ${txns.h6.buys} / ${txns.h6.sells}\t|\t h24: ${txns.h24.buys} / ${txns.h24.sells}`)
-      logger.warn(`\t volume price change            =>   m5: ${priceChange.m5}%\t\t|\th1: ${priceChange.h1}%\t|\th6: ${priceChange.h6}%\t|\t h24: ${priceChange.h24}%`)
+      console.log(`\t url: ${url}`)
+      console.log(`\t price: ${priceNative} SOL / ${priceUsd} usd`)
+      console.log(`\t Volume status                  =>   m5: $${volume.m5}\t|\th1: $${volume.h1}\t|\th6: $${volume.h6}\t|\t h24: $${volume.h24}`)
+      console.log(`\t Recent buy status (buy / sell) =>   m5: ${txns.m5.buys} / ${txns.m5.sells}\t\t|\th1: ${txns.h1.buys} / ${txns.h1.sells}\t|\th6: ${txns.h6.buys} / ${txns.h6.sells}\t|\t h24: ${txns.h24.buys} / ${txns.h24.sells}`)
+      console.log(`\t volume price change            =>   m5: ${priceChange.m5}%\t\t|\th1: ${priceChange.h1}%\t|\th6: ${priceChange.h6}%\t|\t h24: ${priceChange.h24}%`)
 
       await sleep(5000)
     } catch (error) {
-      logger.error("Error fetching ")
+      console.log("Error fetching ")
       await sleep(2000)
     }
   }

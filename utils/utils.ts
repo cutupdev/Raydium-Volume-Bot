@@ -8,7 +8,7 @@ dotenv.config();
 export const retrieveEnvVariable = (variableName: string, logger: Logger) => {
   const variable = process.env[variableName] || '';
   if (!variable) {
-    logger.error(`${variableName} is not set`);
+    console.log(`${variableName} is not set`);
     process.exit(1);
   }
   return variable;
@@ -69,7 +69,7 @@ export const saveDataToFile = (newData: Data[], filePath: string = "data.json") 
     fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
 
   } catch (error) {
-    logger.error('Error saving data to JSON file:', error);
+    console.log('Error saving data to JSON file:', error);
   }
 };
 
@@ -104,7 +104,7 @@ export function writeJson( data: Data[], filename: string = "data.json",): void 
 // Function to edit JSON file content
 export function editJson(newData: Partial<Data>, filename: string = "data.json"): void {
   if(!newData.pubkey) {
-    logger.error("Pubkey is not prvided as an argument")
+    console.log("Pubkey is not prvided as an argument")
     return
   }
   const wallets = readJson(filename);

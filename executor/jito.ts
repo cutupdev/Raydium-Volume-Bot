@@ -21,11 +21,9 @@ export async function bundle(txs: VersionedTransaction[], keypair: Keypair) {
         if (txs[j]) newTxs.push(txs[j])
       }
       let success = await bull_dozer(newTxs, keypair)
-      console.log(" bundle ~ success:", success)
       return success
     }
   } catch (error) {
-    console.log("Error in bundle", error)
     return false
   }
 }
@@ -80,10 +78,10 @@ async function build_bundle(
   }
   try {
     await search.sendBundle(maybeBundle)
-    // logger.info("Bundling done")
+    // console.log("Bundling done")
   } catch (e) {
     console.log(" bundling error:", e)
-    logger.info("error in sending bundle\n")
+    console.log("error in sending bundle\n")
   }
   return maybeBundle
 }
@@ -109,13 +107,13 @@ export const onBundleResult = (c: SearcherClient): Promise<number> => {
         if (isResolved == false) {
 
           if (isAccepted) {
-            logger.info(`bundle accepted, ID: ${result.bundleId}  | Slot: ${result.accepted!.slot}`)
+            console.log(`bundle accepted, ID: ${result.bundleId}  | Slot: ${result.accepted!.slot}`)
             first += 1
             isResolved = true
             resolve(first) // Resolve with 'first' when a bundle is accepted
           }
           if (isRejected) {
-            // logger.warn("bundle is Rejected\n", result)
+            // console.log("bundle is Rejected\n", result)
             // Do not resolve or reject the promise here
           }
         }

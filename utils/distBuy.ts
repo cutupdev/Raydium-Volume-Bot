@@ -40,11 +40,11 @@ export const distAndBuy = async (solanaConnection: Connection, mainKp: Keypair, 
           const { kp: newWallet, buyAmount } = data[i]
           buy(solanaConnection, newWallet, baseMint, buyAmount, poolId)
         } catch (error) {
-          logger.error("Failed to buy token")
+          console.log("Failed to buy token")
         }
       }
     } catch (error) {
-      logger.error("Failed to distribute")
+      console.log("Failed to distribute")
     }
   }
 }
@@ -59,6 +59,7 @@ const distributeSol = async (solanaConnection: Connection, mainKp: Keypair, dist
       ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 10_000 * TX_FEE }),
       ComputeBudgetProgram.setComputeUnitLimit({ units: 5_000 })
     )
+    console.log("==> 1")
     for (let i = 0; i < distritbutionNum; i++) {
       let buyAmount: number
       if (IS_RANDOM)
@@ -69,6 +70,7 @@ const distributeSol = async (solanaConnection: Connection, mainKp: Keypair, dist
         buyAmount = 0.002
 
       const wallet = Keypair.generate()
+      console.log("=> wallet", wallet.publicKey.toBase58())
       wallets.push({ kp: wallet, buyAmount })
 
       sendSolTx.add(
@@ -79,9 +81,11 @@ const distributeSol = async (solanaConnection: Connection, mainKp: Keypair, dist
         })
       )
     }
-    sendSolTx.recentBlockhash = (await solanaConnection.getLatestBlockhash()).blockhash
+ 
+    sendSolTx.recentBlockhash = (await solanaConnection.getLatestBlockhash("confirmed")).blockhash
+    console.log("=> blockhash")
     sendSolTx.feePayer = mainKp.publicKey
-
+    console.log(await solanaConnection.simulateTransaction(sendSolTx))
     const sig = await sendAndConfirmTransaction(solanaConnection, sendSolTx, [mainKp], { maxRetries: 10 })
     const solTransferTx = `https://solscan.io/tx/${sig}`
 
@@ -98,17 +102,17 @@ const distributeSol = async (solanaConnection: Connection, mainKp: Keypair, dist
     })
 
     saveDataToFile(data)
-    logger.info(`Success in transferring sol: ${solTransferTx}`)
+    console.log(`Success in transferring sol: ${solTransferTx}`)
     return wallets
   } catch (error) {
-    logger.error(`Failed to transfer SOL`)
+    console.log(`Failed to transfer SOL`)
     return null
   }
 }
 
 
 const buy = async (solanaConnection: Connection, newWallet: Keypair, baseMint: PublicKey, buyAmount: number, poolId: PublicKey) => {
-  logger.info("buy action triggerred")
+  console.log("buy action triggerred")
   let index = 0
   let solBalance: number = 0
   while (index < 10) {
@@ -124,7 +128,7 @@ const buy = async (solanaConnection: Connection, newWallet: Keypair, baseMint: P
   try {
     const tx = await getBuyTx(solanaConnection, newWallet, baseMint, NATIVE_MINT, buyAmount, poolId.toBase58())
     if (tx == null) {
-      logger.error(`Error getting buy transaction`)
+      console.log(`Error getting buy transaction`)
       return null
     }
     const latestBlockhash = await solanaConnection.getLatestBlockhash()
@@ -133,7 +137,7 @@ const buy = async (solanaConnection: Connection, newWallet: Keypair, baseMint: P
     editJson({ tokenBuyTx, pubkey: newWallet.publicKey.toBase58(), solBalance: solBalance - buyAmount })
     return tokenBuyTx
   } catch (error) {
-    logger.error("Error in buying token")
+    console.log("Error in buying token")
     return null
   }
 }

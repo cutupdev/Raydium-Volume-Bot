@@ -62,10 +62,11 @@ export class PoolKeys {
 
     static async fetchPoolKeyInfo(connection: Connection, baseMint: PublicKey, quoteMint: PublicKey): Promise<LiquidityPoolKeysV4> {
         const marketId = await this.fetchMarketId(connection, baseMint, quoteMint, 'confirmed')
+
         const marketInfo = await this.fetchMarketInfo(connection, marketId);
         const baseMintInfo = await connection.getParsedAccountInfo(baseMint, "confirmed") as MintInfo;
         const baseDecimals = baseMintInfo.value.data.parsed.info.decimals
-
+        
         const V4PoolInfo = await this.generateV4PoolInfo(baseMint, quoteMint, marketId)
         const lpMintInfo = await connection.getParsedAccountInfo(V4PoolInfo.poolInfo.lpMint, "confirmed") as MintInfo;
 

@@ -26,13 +26,13 @@ export const execute = async (transaction: VersionedTransaction, latestBlockhash
   );
 
   if (confirmation.value.err) {
-    logger.warn("Confrimtaion error")
+    console.log("Confrimtaion error")
     return ""
   } else {
     if (isBuy)
-      logger.info(`Success in buy transaction: https://solscan.io/tx/${signature}`)
+      console.log(`Success in buy transaction: https://solscan.io/tx/${signature}`)
     else 
-      logger.info(`Success in Sell transaction: https://solscan.io/tx/${signature}`)
+      console.log(`Success in Sell transaction: https://solscan.io/tx/${signature}`)
   }
   return signature
 }

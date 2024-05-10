@@ -11,16 +11,19 @@ export const sell = async (solanaConnection: Connection, poolId: PublicKey, base
   while (true) {
     try {
       const data: Data[] = readJson()
-      if(data.length == 0)
+      if (data.length == 0)
         continue
-      const dataToSell = data.filter((datum: Data) => datum.tokenBalance && datum.tokenBalance > 0)[0]
+      const dataToSellAll = data.filter((datum: Data) => datum.tokenBalance && datum.tokenBalance > 0)
+      if (dataToSellAll.length == 0)
+        continue
+      const dataToSell = dataToSellAll[0]
       const wallet = Keypair.fromSecretKey(base58.decode(dataToSell.privateKey))
       console.log("tokenBal in file => ", dataToSell.tokenBalance)
 
       const tokenAta = await getAssociatedTokenAddress(baseMint, wallet.publicKey)
       const tokenBalInfo = await solanaConnection.getTokenAccountBalance(tokenAta)
       if (!tokenBalInfo) {
-        logger.error("Balance incorrect")
+        console.log("Balance incorrect")
       }
       const tokenBalance = tokenBalInfo.value.amount
       console.log("Real token account balance => ", tokenBalance)
@@ -28,7 +31,7 @@ export const sell = async (solanaConnection: Connection, poolId: PublicKey, base
       try {
         const sellTx = await getSellTx(solanaConnection, wallet, baseMint, NATIVE_MINT, tokenBalance, poolId.toBase58())
         if (sellTx == null) {
-          logger.error(`Error getting buy transaction`)
+          console.log(`Error getting buy transaction`)
           return null
         }
 
@@ -49,7 +52,7 @@ export const sell = async (solanaConnection: Connection, poolId: PublicKey, base
       }
     } catch (error) {
       console.log("data or balance error:", error)
-      logger.error("Failed to sell token")
+      console.log("Failed to sell token")
     }
     await sleep(SELL_INTERVAL)
   }
