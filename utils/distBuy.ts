@@ -33,7 +33,7 @@ const solanaConnection = new Connection(RPC_ENDPOINT, {
 })
 
 export const distAndBuy = async (mainKp: Keypair, poolId: PublicKey, baseMint: PublicKey, distritbutionNum: number) => {
-  while (true) {
+  // while (true) {
     try {
       const data = await distributeSol(mainKp, distritbutionNum)
       if (data == null)
@@ -51,7 +51,7 @@ export const distAndBuy = async (mainKp: Keypair, poolId: PublicKey, baseMint: P
     } catch (error) {
       console.log("Failed to distribute")
     }
-  }
+  // }
 }
 
 

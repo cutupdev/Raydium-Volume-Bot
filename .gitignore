@@ -137,3 +137,5 @@ pnpm-lock.yaml
 
 # Visual Studio Code 
 *.code-workspace
+
+data.json

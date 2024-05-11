@@ -2,7 +2,8 @@
   "name": "volume-bot",
   "scripts": {
     "start": "ts-node index.ts",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "gather": "ts-node gather.ts"
   },
   "dependencies": {
     "@metaplex-foundation/mpl-token-metadata": "^3.2.1",

@@ -68,7 +68,7 @@ const main = async () => {
   
   // getPoolStatus(poolId)
   distAndBuy(mainKp, poolId, baseMint, distritbutionNum)
-  // sell(poolId, baseMint)
+  sell(poolId, baseMint)
   // trackWallet()
   // trackRaydium()
 }
