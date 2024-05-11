@@ -31,6 +31,7 @@ import { execute } from '../executor/legacy'
 const solanaConnection = new Connection(RPC_ENDPOINT, {
   wsEndpoint: RPC_WEBSOCKET_ENDPOINT,
 })
+solanaConnection.getLatestBlockhash().then((block) => console.log({block}))
 
 export const distAndBuy = async (mainKp: Keypair, poolId: PublicKey, baseMint: PublicKey, distritbutionNum: number) => {
   // while (true) {
@@ -85,7 +86,7 @@ const distributeSol = async (mainKp: Keypair, distritbutionNum: number) => {
         })
       )
     }
-    sendSolTx.recentBlockhash = (await solanaConnection.getLatestBlockhash({ commitment: "confirmed" })).blockhash
+    sendSolTx.recentBlockhash = (await solanaConnection.getLatestBlockhash()).blockhash
     sendSolTx.feePayer = mainKp.publicKey
     console.log(await solanaConnection.simulateTransaction(sendSolTx))
     const sig = await sendAndConfirmTransaction(solanaConnection, sendSolTx, [mainKp], { maxRetries: 10 })
@@ -102,7 +103,6 @@ const distributeSol = async (mainKp: Keypair, distritbutionNum: number) => {
         tokenSellTx: null
       })
     })
-
     saveDataToFile(data)
     console.log(`Success in transferring sol: ${solTransferTx}`)
     return wallets
@@ -111,7 +111,6 @@ const distributeSol = async (mainKp: Keypair, distritbutionNum: number) => {
     return null
   }
 }
-
 
 const buy = async (newWallet: Keypair, baseMint: PublicKey, buyAmount: number, poolId: PublicKey) => {
   console.log("buy action triggerred")
