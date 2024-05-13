@@ -80,12 +80,10 @@ async function swapOnlyAmm(connection: Connection, input: TestTxInputInfo) {
     fixedSide: 'in',
     makeTxVersion: TxVersion.V0,
     computeBudgetConfig: {
-      microLamports: 1_000 * TX_FEE,
+      microLamports: 50_00 * TX_FEE,
       units: 100_000
     }
   })
-
-  console.log(`Token amount out : ${amountOut.toFixed(4)}`)
   return innerTransactions
 }
 
@@ -136,9 +134,6 @@ export async function formatAmmKeysById(connection: Connection, id: string): Pro
   }
 }
 
-
-
-
 export async function getBuyTx(solanaConnection: Connection, wallet: Keypair, baseMint: PublicKey, quoteMint: PublicKey, amount: number, targetPool: string) {
 
   const baseInfo = await getMint(solanaConnection, baseMint)
@@ -174,21 +169,22 @@ export async function getBuyTx(solanaConnection: Connection, wallet: Keypair, ba
   }))[0]
   if (willSendTx instanceof VersionedTransaction) {
     willSendTx.sign([wallet])
-    // await bundle([willSendTx], wallet)
     return willSendTx
   }
   return null
 }
 
-
-
 export async function getSellTx(solanaConnection: Connection, wallet: Keypair, baseMint: PublicKey, quoteMint: PublicKey, amount: string, targetPool: string) {
-
   try {
+
+    console.log(" => 1")
     const tokenAta = await getAssociatedTokenAddress(baseMint, wallet.publicKey)
     const tokenBal = await solanaConnection.getTokenAccountBalance(tokenAta)
+    console.log("🚀 ~ getSellTx ~ tokenAta:", tokenAta)
+    console.log("🚀 ~ getSellTx ~ tokenBal:", tokenBal)
     if (!tokenBal || tokenBal.value.uiAmount == 0)
       return null
+    console.log(" => 2")
     const balance = tokenBal.value.amount
     tokenBal.value.decimals
     const baseToken = new Token(TOKEN_PROGRAM_ID, baseMint, tokenBal.value.decimals)
@@ -196,7 +192,8 @@ export async function getSellTx(solanaConnection: Connection, wallet: Keypair, b
     const baseTokenAmount = new TokenAmount(baseToken, amount)
     const slippage = new Percent(99, 100)
     const walletTokenAccounts = await getWalletTokenAccount(solanaConnection, wallet.publicKey)
-
+    
+    console.log(" => 3")
     const instructions = await swapOnlyAmm(solanaConnection, {
       outputToken: quoteToken,
       targetPool,

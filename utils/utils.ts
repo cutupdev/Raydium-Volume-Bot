@@ -52,7 +52,6 @@ export const randVal = (min: number, max: number, count: number, total: number, 
 
 export const saveDataToFile = (newData: Data[], filePath: string = "data.json") => {
   try {
-    console.log("Save data invoked")
     let existingData: Data[] = [];
 
     // Check if the file exists
@@ -78,12 +77,12 @@ export const sleep = async (ms: number) => {
 }
 
 
-// function deleteConsoleLines(numLines: number) {
-//   for (let i = 0; i < numLines; i++) {
-//     process.stdout.moveCursor(0, -1); // Move cursor up one line
-//     process.stdout.clearLine(-1);        // Clear the line
-//   }
-// }
+export function deleteConsoleLines(numLines: number) {
+  for (let i = 0; i < numLines; i++) {
+    process.stdout.moveCursor(0, -1); // Move cursor up one line
+    process.stdout.clearLine(-1);        // Clear the line
+  }
+}
 
 
 // Function to read JSON file

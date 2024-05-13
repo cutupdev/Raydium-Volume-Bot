@@ -8,7 +8,7 @@ import { solanaConnection as connection, mainKp } from "..";
 import { RPC_ENDPOINT } from "../constants";
 
 
-async function getPriorityFeeEstimate(priorityLevel: string, transaction: Transaction) {
+export async function getPriorityFeeEstimate(priorityLevel: string, transaction: Transaction) {
   const response = await fetch(RPC_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -31,10 +31,10 @@ async function getPriorityFeeEstimate(priorityLevel: string, transaction: Transa
     " :",
     data.result.priorityFeeEstimate
   );
+  console.log("🚀 ~ getPriorityFeeEstimate ~ data.result:", data.result)
   return data.result;
 }
-async function sendTransactionWithPriorityFee(priorityLevel: string, transaction: Transaction) {
- 
+export async function sendTransactionWithPriorityFee(transaction: Transaction, priorityLevel: string) {
   transaction.recentBlockhash = (
     await connection.getLatestBlockhash()
   ).blockhash;
@@ -54,9 +54,12 @@ async function sendTransactionWithPriorityFee(priorityLevel: string, transaction
       mainKp,
     ]);
     console.log(`Transaction sent successfully with signature ${txid}`);
+    return txid
   } catch (e) {
     console.error(`Failed to send transaction: ${e}`);
+    return null
   }
+
 }
 
 // sendTransactionWithPriorityFee("High"); // Choose between "Min", "Low", "Medium", "High", "VeryHigh", "UnsafeMax"

@@ -8,9 +8,16 @@ export const IS_RANDOM = retrieveEnvVariable('IS_RANDOM', logger) === 'true'
 export const BUY_AMOUNT = Number(retrieveEnvVariable('BUY_AMOUNT', logger))
 export const BUY_UPPER_AMOUNT = Number(retrieveEnvVariable('BUY_UPPER_AMOUNT', logger))
 export const BUY_LOWER_AMOUNT = Number(retrieveEnvVariable('BUY_LOWER_AMOUNT', logger))
-export const BUY_INTERVAL = Number(retrieveEnvVariable('BUY_INTERVAL', logger))
-export const SELL_INTERVAL = Number(retrieveEnvVariable('SELL_INTERVAL', logger))
+
+export const BUY_INTERVAL_MIN = Number(retrieveEnvVariable('BUY_INTERVAL_MIN', logger))
+export const BUY_INTERVAL_MAX = Number(retrieveEnvVariable('BUY_INTERVAL_MAX', logger))
+
+// export const SELL_INTERVAL = Number(retrieveEnvVariable('SELL_INTERVAL', logger))
+// export const SELL_AT = Number(retrieveEnvVariable('SELL_AT', logger))
 export const DISTRIBUTE_WALLET_NUM = Number(retrieveEnvVariable('DISTRIBUTE_WALLET_NUM', logger))
+export const CHECK_BAL_INTERVAL = Number(retrieveEnvVariable('CHECK_BAL_INTERVAL', logger))
+
+export const WALLET_NUM = Number(retrieveEnvVariable('WALLET_NUM', logger))
 
 export const TX_FEE = Number(retrieveEnvVariable('TX_FEE', logger))
 

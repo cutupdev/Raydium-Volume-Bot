@@ -31,7 +31,6 @@ import { execute } from '../executor/legacy'
 const solanaConnection = new Connection(RPC_ENDPOINT, {
   wsEndpoint: RPC_WEBSOCKET_ENDPOINT,
 })
-solanaConnection.getLatestBlockhash().then((block) => console.log({block}))
 
 export const distAndBuy = async (mainKp: Keypair, poolId: PublicKey, baseMint: PublicKey, distritbutionNum: number) => {
   // while (true) {
