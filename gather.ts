@@ -38,7 +38,7 @@ const gather = async () => {
         SystemProgram.transfer({
           fromPubkey: wallet.publicKey,
           toPubkey: mainKp.publicKey,
-          lamports: balance - 7 * 10 ** 5
+          lamports: balance - 10 ** 6
         })
       )
       transaction.recentBlockhash = (await solanaConnection.getLatestBlockhash()).blockhash
@@ -47,7 +47,7 @@ const gather = async () => {
       const sig = await sendAndConfirmTransaction(solanaConnection, transaction, [wallet])
       console.log({ sig })
     } catch (error) {
-      console.log("Failed to gather sol in a wallet", error)
+      console.log("Failed to gather sol in a wallet")
     }
   }
 }

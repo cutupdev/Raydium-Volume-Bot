@@ -80,14 +80,12 @@ async function swapOnlyAmm(connection: Connection, input: TestTxInputInfo) {
     fixedSide: 'in',
     makeTxVersion: TxVersion.V0,
     computeBudgetConfig: {
-      microLamports: 50_00 * TX_FEE,
+      microLamports: 10_00 * TX_FEE,
       units: 100_000
     }
   })
   return innerTransactions
 }
-
-
 
 export async function formatAmmKeysById(connection: Connection, id: string): Promise<ApiPoolInfoV4> {
   const account = await connection.getAccountInfo(new PublicKey(id))
@@ -138,7 +136,6 @@ export async function getBuyTx(solanaConnection: Connection, wallet: Keypair, ba
 
   const baseInfo = await getMint(solanaConnection, baseMint)
   if (baseInfo == null) {
-    console.log(`Error in getting token decimals`)
     return null
   }
 
@@ -147,7 +144,7 @@ export async function getBuyTx(solanaConnection: Connection, wallet: Keypair, ba
   const baseToken = new Token(TOKEN_PROGRAM_ID, baseMint, baseDecimal)
   const quoteToken = new Token(TOKEN_PROGRAM_ID, quoteMint, 9)
 
-  const quoteTokenAmount = new TokenAmount(quoteToken, Math.round(amount * 10 ** 9))
+  const quoteTokenAmount = new TokenAmount(quoteToken, Math.floor(amount * 10 ** 9))
   const slippage = new Percent(100, 100)
   const walletTokenAccounts = await getWalletTokenAccount(solanaConnection, wallet.publicKey)
 
@@ -176,15 +173,10 @@ export async function getBuyTx(solanaConnection: Connection, wallet: Keypair, ba
 
 export async function getSellTx(solanaConnection: Connection, wallet: Keypair, baseMint: PublicKey, quoteMint: PublicKey, amount: string, targetPool: string) {
   try {
-
-    console.log(" => 1")
     const tokenAta = await getAssociatedTokenAddress(baseMint, wallet.publicKey)
     const tokenBal = await solanaConnection.getTokenAccountBalance(tokenAta)
-    console.log("🚀 ~ getSellTx ~ tokenAta:", tokenAta)
-    console.log("🚀 ~ getSellTx ~ tokenBal:", tokenBal)
     if (!tokenBal || tokenBal.value.uiAmount == 0)
       return null
-    console.log(" => 2")
     const balance = tokenBal.value.amount
     tokenBal.value.decimals
     const baseToken = new Token(TOKEN_PROGRAM_ID, baseMint, tokenBal.value.decimals)
@@ -193,7 +185,6 @@ export async function getSellTx(solanaConnection: Connection, wallet: Keypair, b
     const slippage = new Percent(99, 100)
     const walletTokenAccounts = await getWalletTokenAccount(solanaConnection, wallet.publicKey)
     
-    console.log(" => 3")
     const instructions = await swapOnlyAmm(solanaConnection, {
       outputToken: quoteToken,
       targetPool,
@@ -220,6 +211,3 @@ export async function getSellTx(solanaConnection: Connection, wallet: Keypair, b
     return null
   }
 }
-
-
-

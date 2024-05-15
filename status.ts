@@ -21,7 +21,7 @@ import {
   RPC_WEBSOCKET_ENDPOINT,
   TOKEN_MINT,
 } from './constants'
-import { deleteConsoleLines, logger, PoolKeys, sleep } from './utils'
+import { deleteConsoleLines, logger, PoolKeys, readJson, sleep } from './utils'
 import base58 from 'bs58'
 
 export const solanaConnection = new Connection(RPC_ENDPOINT, {
@@ -40,6 +40,18 @@ let changeAmount = 0
 let buyNum = 0
 let sellNum = 0
 logger.level = LOG_LEVEL
+
+interface Data {
+  privateKey: string;
+  pubkey: string;
+  solBalance: number | null;
+  tokenBuyTx: string | null,
+  tokenSellTx: string | null,
+}
+
+const data: Data[] = readJson()
+const walletPks = data.map(data => data.pubkey)
+console.log("🚀 ~ walletPks:", walletPks)
 
 
 const main = async () => {
@@ -103,7 +115,7 @@ async function trackWalletOnLog(connection: Connection, quoteVault: PublicKey): 
       return
     }
     changeAmount = bal - initialWsolBal
-    deleteConsoleLines(1)
+    // deleteConsoleLines(1)
     console.log(`Other users bought ${buyNum - bought} times and sold ${sellNum - sold} times, total SOL change is ${changeAmount - totalSolPut}SOL`)
   }, CHECK_BAL_INTERVAL)
   try {
@@ -111,21 +123,28 @@ async function trackWalletOnLog(connection: Connection, quoteVault: PublicKey): 
       quoteVault,
       async ({ logs, err, signature }) => {
         if (err) { }
-        // console.log("Transaction failed")
         else {
-          const sold = logs.filter(log => log.includes("CreateIdempotent")).length == 0
-          if (!sold)
-            sellNum++
-          else
-            buyNum++
-          // console.log(`\nTransaction success: https://solscan.io/tx/${signature}\n`)
-          // const parsedData = await connection.getParsedTransaction(signature, { maxSupportedTransactionVersion: 0 })
-          // const parsedData1 = await connection.getParsedTransaction(signature)
+          
+          const parsedData = await connection.getParsedTransaction(signature, { maxSupportedTransactionVersion: 0, commitment: "confirmed" })
+          const signer = parsedData?.transaction.message.accountKeys.filter((elem: any) => {
+            return elem.signer == true
+          })[0].pubkey.toBase58()
+
+          console.log(`\nTransaction success: https://solscan.io/tx/${signature}\n`)
+          if(!walletPks.includes(signer!)){
+            if (Number(parsedData?.meta?.preBalances[0]) > Number(parsedData?.meta?.postBalances[0])) {
+              buyNum++
+            } else {
+              sellNum++
+            }
+          }
+
+
         }
       },
       "confirmed"
     );
-  } catch (error) {}
+  } catch (error) { }
 }
 
 
