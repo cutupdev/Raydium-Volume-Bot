@@ -30,15 +30,15 @@
     {
         "privateKey": "4Q5qXBPe8UBPVAarnu91bhF8a59SbdHF4zyGwsxZewVCeo5dMx951pox9xXn7DTGHZqifLgYUb1YQj4t5J32HgyP",
         "pubkey": "EvMzgjSTWxzKuUWotz6C6G7d2oEmRsYthjgFweFavYq",
-        "solBalance": 17699505,
-        "tokenBuyTx": "https://solscan.io/tx/4HL9DgVQxxwnRfY8kT4N7nnBxSSxqmwRcTVZjJc9H3jToJq3B8Rp9sWRFGvhCsa28LcVxb4uERNgAAe7TKW4m35f",
-        "tokenSellTx": "https://solscan.io/tx/3NFmFQo7TtbgvLcFVXjRdoZKd6vNF137jjB7a1sRv8Uc3Vi9aRFtHtpHiLnstZZnZAtBEoR91FgLHdDb2c1QGaFk"
+        "solBalance": 0.018945,
+        "tokenBuyTx": "https://solscan.io/tx/3yxsuteJBz67Rq3TjYe1NCjb5GySTcZiit36gv5gzgViKqHLP63WYxbREA16yC17CekparrBUSv4coU2vvgFUQMJ",
+        "tokenSellTx": null
     },
     {
         "privateKey": "5xdmRq4jS5vA9Fk7uBdzDZCaeLzX1MVkrAg3GEyXjFg2KCsoDn3an2w2Jx2ApzPudM3ruhiWqcRFFFM9XKE2HP7Q",
         "pubkey": "AYNzirLmtU2zvSnXoiRrYYURdYH41x55qq2zJhDNh1Ez",
-        "solBalance": 17791467,
-        "tokenBuyTx": "https://solscan.io/tx/26Su8Y8vJLdwJE21ikBvC9aUeQZHrz7T7qYfFMD8QZGwmLvNpeFeGhjf3b5wjGKddfbg7YUncMcyNNyknUc6Myex",
-        "tokenSellTx": "https://solscan.io/tx/877Rrmp1umKySncQ9peopsevf7CLj6uKAhnZKV6jMeNFPJ2FwbgTR7RVvJv1YVw5egXicNN7p4hT9dCJTEptCVR"
+        "solBalance": 0.018569000000000002,
+        "tokenBuyTx": "https://solscan.io/tx/5SRvMyQdjQ1iGS3bjZeVgD9f64PWi2pRaLKA8hmZ1HFHJXoju93J4d9Am4hwjzun8QQJrMoF9bqW9mWVpSvmKPxB",
+        "tokenSellTx": null
     }
 ]

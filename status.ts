@@ -115,7 +115,7 @@ async function trackWalletOnLog(connection: Connection, quoteVault: PublicKey): 
       return
     }
     changeAmount = bal - initialWsolBal
-    // deleteConsoleLines(1)
+    deleteConsoleLines(1)
     console.log(`Other users bought ${buyNum - bought} times and sold ${sellNum - sold} times, total SOL change is ${changeAmount - totalSolPut}SOL`)
   }, CHECK_BAL_INTERVAL)
   try {
@@ -130,7 +130,7 @@ async function trackWalletOnLog(connection: Connection, quoteVault: PublicKey): 
             return elem.signer == true
           })[0].pubkey.toBase58()
 
-          console.log(`\nTransaction success: https://solscan.io/tx/${signature}\n`)
+          // console.log(`\nTransaction success: https://solscan.io/tx/${signature}\n`)
           if(!walletPks.includes(signer!)){
             if (Number(parsedData?.meta?.preBalances[0]) > Number(parsedData?.meta?.postBalances[0])) {
               buyNum++

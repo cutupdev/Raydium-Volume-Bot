@@ -5,8 +5,7 @@
     "tsc": "tsc --noEmit",
     "gather": "ts-node gather.ts",
     "status": "ts-node status.ts",
-    "massive": "ts-node massiveBuy.ts",
-    "freeze": "ts-node freeze.ts"
+    "massive": "ts-node massiveBuy.ts"
   },
   "dependencies": {
     "@metaplex-foundation/mpl-token-metadata": "^3.2.1",
