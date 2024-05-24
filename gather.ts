@@ -33,18 +33,23 @@ const gather = async () => {
         console.log("sol balance is 0, skip this wallet")
         continue
       }
+      const rent = await solanaConnection.getMinimumBalanceForRentExemption(32);
+      console.log("🚀 ~ gather ~ minBalance:", rent)
+      
       const transaction = new Transaction().add(
-        ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 5000 }),
+        ComputeBudgetProgram.setComputeUnitPrice({ microLamports: 600_000 }),
+        ComputeBudgetProgram.setComputeUnitLimit({ units: 20_000}),
         SystemProgram.transfer({
           fromPubkey: wallet.publicKey,
           toPubkey: mainKp.publicKey,
-          lamports: balance - 10 ** 6
+          lamports: balance - 13 * 10 ** 3 - rent
         })
       )
+      
       transaction.recentBlockhash = (await solanaConnection.getLatestBlockhash()).blockhash
       transaction.feePayer = wallet.publicKey
-
-      const sig = await sendAndConfirmTransaction(solanaConnection, transaction, [wallet])
+      console.log(await solanaConnection.simulateTransaction(transaction))
+      const sig = await sendAndConfirmTransaction(solanaConnection, transaction, [wallet], { skipPreflight: true })
       console.log({ sig })
     } catch (error) {
       console.log("Failed to gather sol in a wallet")
