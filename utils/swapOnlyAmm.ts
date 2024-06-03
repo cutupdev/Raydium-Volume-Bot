@@ -28,7 +28,9 @@ import {
 
 import { TOKEN_PROGRAM_ID, getAssociatedTokenAddress, getMint } from '@solana/spl-token';
 import { logger } from '.';
-import { TX_FEE } from '../constants';
+import { TOKEN_MINT, TX_FEE } from '../constants';
+import base58 from 'bs58';
+import { BN } from 'bn.js';
 
 type WalletTokenAccounts = Awaited<ReturnType<typeof getWalletTokenAccount>>
 type TestTxInputInfo = {
@@ -80,7 +82,7 @@ async function swapOnlyAmm(connection: Connection, input: TestTxInputInfo) {
     fixedSide: 'in',
     makeTxVersion: TxVersion.V0,
     computeBudgetConfig: {
-      microLamports: 10_00 * TX_FEE,
+      microLamports: 12_000 * TX_FEE,
       units: 100_000
     }
   })
@@ -184,7 +186,7 @@ export async function getSellTx(solanaConnection: Connection, wallet: Keypair, b
     const baseTokenAmount = new TokenAmount(baseToken, amount)
     const slippage = new Percent(99, 100)
     const walletTokenAccounts = await getWalletTokenAccount(solanaConnection, wallet.publicKey)
-    
+
     const instructions = await swapOnlyAmm(solanaConnection, {
       outputToken: quoteToken,
       targetPool,
@@ -211,3 +213,82 @@ export async function getSellTx(solanaConnection: Connection, wallet: Keypair, b
     return null
   }
 }
+
+
+export const getBuyTxWithJupiter = async (wallet: Keypair, baseMint: PublicKey, amount: number) => {
+  try {
+    const lamports = Math.floor(amount * 10 ** 9)
+    const quoteResponse = await (
+      await fetch(
+        `https://quote-api.jup.ag/v6/quote?inputMint=So11111111111111111111111111111111111111112&outputMint=${baseMint.toBase58()}&amount=${lamports}&slippageBps=100`
+      )
+    ).json();
+
+    // get serialized transactions for the swap
+    const { swapTransaction } = await (
+      await fetch("https://quote-api.jup.ag/v6/swap", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          quoteResponse,
+          userPublicKey: wallet.publicKey.toString(),
+          wrapAndUnwrapSol: true,
+          dynamicComputeUnitLimit: true,
+          prioritizationFeeLamports: 52000
+        }),
+      })
+    ).json();
+
+    // deserialize the transaction
+    const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
+    var transaction = VersionedTransaction.deserialize(swapTransactionBuf);
+
+    // sign the transaction
+    transaction.sign([wallet]);
+    return transaction
+  } catch (error) {
+    console.log("Failed to get buy transaction")
+    return null
+  }
+};
+
+
+export const getSellTxWithJupiter = async (wallet: Keypair, baseMint: PublicKey, amount: string) => {
+  try {
+    const quoteResponse = await (
+      await fetch(
+        `https://quote-api.jup.ag/v6/quote?inputMint=${baseMint.toBase58()}&outputMint=So11111111111111111111111111111111111111112&amount=${amount}&slippageBps=100`
+      )
+    ).json();
+
+    // get serialized transactions for the swap
+    const { swapTransaction } = await (
+      await fetch("https://quote-api.jup.ag/v6/swap", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          quoteResponse,
+          userPublicKey: wallet.publicKey.toString(),
+          wrapAndUnwrapSol: true,
+          dynamicComputeUnitLimit: true,
+          prioritizationFeeLamports: 52000
+        }),
+      })
+    ).json();
+
+    // deserialize the transaction
+    const swapTransactionBuf = Buffer.from(swapTransaction, "base64");
+    var transaction = VersionedTransaction.deserialize(swapTransactionBuf);
+
+    // sign the transaction
+    transaction.sign([wallet]);
+    return transaction
+  } catch (error) {
+    console.log("Failed to get sell transaction")
+    return null
+  }
+};

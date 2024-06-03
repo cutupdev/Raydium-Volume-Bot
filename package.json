@@ -2,6 +2,7 @@
   "name": "volume-bot",
   "scripts": {
     "start": "ts-node index.ts",
+    "sell": "ts-node sell.ts",
     "tsc": "tsc --noEmit",
     "gather": "ts-node gather.ts",
     "status": "ts-node status.ts",

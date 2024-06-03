@@ -11,7 +11,7 @@ export class PoolKeys {
     static SOL_DECIMALS = 9
 
     static async fetchMarketId(connection: Connection, baseMint: PublicKey, quoteMint: PublicKey, commitment: Commitment) {
-        const accounts = await connection.getProgramAccounts(
+        let accounts = await connection.getProgramAccounts(
             new PublicKey('srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX'),
             {
                 commitment,
@@ -32,6 +32,29 @@ export class PoolKeys {
                 ],
             }
         );
+        if(!accounts)
+        accounts = await connection.getProgramAccounts(
+            new PublicKey('srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX'),
+            {
+                commitment,
+                filters: [
+                    { dataSize: MARKET_STATE_LAYOUT_V3.span },
+                    {
+                        memcmp: {
+                            offset: MARKET_STATE_LAYOUT_V3.offsetOf("quoteMint"),
+                            bytes: baseMint.toBase58(),
+                        },
+                    },
+                    {
+                        memcmp: {
+                            offset: MARKET_STATE_LAYOUT_V3.offsetOf("baseMint"),
+                            bytes: quoteMint.toBase58(),
+                        },
+                    },
+                ],
+            }
+        );
+        console.log(accounts)
         return accounts.map(({ account }) => MARKET_STATE_LAYOUT_V3.decode(account.data))[0].ownAddress
     }
 
@@ -60,13 +83,13 @@ export class PoolKeys {
         return { poolInfo }
     }
 
-    static async fetchPoolKeyInfo(connection: Connection, baseMint: PublicKey, quoteMint: PublicKey): Promise<LiquidityPoolKeysV4> {
+    static async fetchPoolKeyInfo(connection: Connection, baseMint: PublicKey, quoteMint: PublicKey) {
         const marketId = await this.fetchMarketId(connection, baseMint, quoteMint, 'confirmed')
 
-        const marketInfo = await this.fetchMarketInfo(connection, marketId);
-        const baseMintInfo = await connection.getParsedAccountInfo(baseMint, "confirmed") as MintInfo;
-        const baseDecimals = baseMintInfo.value.data.parsed.info.decimals
-        
+        // const marketInfo = await this.fetchMarketInfo(connection, marketId);
+        // const baseMintInfo = await connection.getParsedAccountInfo(baseMint, "confirmed") as MintInfo;
+        // const baseDecimals = baseMintInfo.value.data.parsed.info.decimals
+
         const V4PoolInfo = await this.generateV4PoolInfo(baseMint, quoteMint, marketId)
         const lpMintInfo = await connection.getParsedAccountInfo(V4PoolInfo.poolInfo.lpMint, "confirmed") as MintInfo;
 
@@ -78,7 +101,7 @@ export class PoolKeys {
             baseVault: V4PoolInfo.poolInfo.baseVault,
             quoteVault: V4PoolInfo.poolInfo.quoteVault,
             lpMint: V4PoolInfo.poolInfo.lpMint,
-            baseDecimals: baseDecimals,
+            // baseDecimals: baseDecimals,
             quoteDecimals: this.SOL_DECIMALS,
             lpDecimals: lpMintInfo.value.data.parsed.info.decimals,
             version: 4,
@@ -91,11 +114,11 @@ export class PoolKeys {
             marketVersion: 3,
             marketProgramId: new PublicKey(this.OPENBOOK_ADDRESS),
             marketAuthority: Market.getAssociatedAuthority({ programId: new PublicKey(this.OPENBOOK_ADDRESS), marketId: marketId }).publicKey,
-            marketBaseVault: marketInfo.baseVault,
-            marketQuoteVault: marketInfo.quoteVault,
-            marketBids: marketInfo.bids,
-            marketAsks: marketInfo.asks,
-            marketEventQueue: marketInfo.eventQueue,
+            // marketBaseVault: marketInfo.baseVault,
+            // marketQuoteVault: marketInfo.quoteVault,
+            // marketBids: marketInfo.bids,
+            // marketAsks: marketInfo.asks,
+            // marketEventQueue: marketInfo.eventQueue,
             lookupTableAccount: PublicKey.default
         }
     }

@@ -65,7 +65,16 @@ export const saveDataToFile = (newData: Data[], filePath: string = "data.json") 
     fs.writeFileSync(filePath, JSON.stringify(existingData, null, 2));
 
   } catch (error) {
-    console.log('Error saving data to JSON file:', error);
+    try {
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath);
+        console.log(`File ${filePath} deleted and create new file.`);
+      }
+      fs.writeFileSync(filePath, JSON.stringify(newData, null, 2));
+      console.log("File is saved successfully.")
+    } catch (error) {
+      console.log('Error saving data to JSON file:', error);
+    }
   }
 };
 
