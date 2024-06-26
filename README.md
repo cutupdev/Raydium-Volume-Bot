@@ -79,6 +79,9 @@ npm start
 
 
 ## Author
+
+Discord: rabnail_15 in discord
+
 Twitter: [@Rabnail](https://twitter.com/Rabnail_SOL)
 
 Telegram: [@Rabnail](https://t.me/rab_nail)
