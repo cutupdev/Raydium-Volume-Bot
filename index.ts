@@ -135,7 +135,7 @@ const main = async () => {
         }
       }
 
-      await sleep(1000)
+      await sleep(3000)
 
       // try selling until success
       let j = 0
