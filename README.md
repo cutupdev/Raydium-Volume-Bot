@@ -82,7 +82,7 @@ npm start
 
 
 
-Twitter: [@Rabnail](https://twitter.com/Lamoerey)
+Twitter: [@Lamoerey](https://twitter.com/Lamoerey)
 
 
 You can always find me here, for help, or for other projects.
