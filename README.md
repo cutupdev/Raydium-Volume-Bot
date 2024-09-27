@@ -1,8 +1,8 @@
-# Raydium Pairs Volume Bot
+# Raydium Volume Bot
 
-This bot is designed to automate the distribution of SOL to multiple wallets and execute endless buy and sell swap transactions simultaneously on the Raydium platform. It leverages Solana's blockchain technology to perform these operations efficiently.
+Distribution of SOL to multiple wallets and execute automated buy and sell transactions on the Solana Raydium platform.
 
-## This product is trying to show the basic functions of volume bot, and not suitable for big live tokens. So, if you want better version, you can refer to version 2 in my github.
+## It's the version for basic functions of volume bot, so I have another advanced version for big live tokens. So, if you want better version, feel free to reach out of me.
 
 ## Features
 
@@ -13,6 +13,21 @@ This bot is designed to automate the distribution of SOL to multiple wallets and
 - **Sell Mode**: Gradually sells all tokens in sub-wallets through small transactions.
 - **Token Pair Settings**: Configurable token mint and pool ID for swap operations.
 - **Logging**: Supports adjustable logging levels for better monitoring and debugging.
+
+## Current Version's Demerits
+- ❌ **No JITO mode**: Jito mode was not there to make transaction speed higher.
+- ❌ **Repetitive buy and sell with one wallet**: The last version of the Raydium Volume Bot used fixed wallets, so it was apparent on DexScreener that some wallets performed repetitive buy and sell actions.
+- ❌ **No increase in the number of makers**: It didn't increase the number of pool makers, only the volume.
+- ❌ **Gathering token instead of SOL**: When gathering, if there were tokens left, it didn't sell them before gathering. Instead, it just gathered tokens to the main wallet.
+- ❌ **Equal number of buys and sells**: One-time buy and one-time sell actions left sell pressure at the end, as there was always a sell at the end of the volume operation.
+
+## Advanced Version's Improvements
+- ✅ **Transferring SOL to new wallet**: After buying and selling in one wallet, it transfers SOL to a newly created wallet and continues buying and selling there.
+- ✅ **Maker increase**: New wallets are created every round of buying and selling, increasing the number of makers.
+- ✅ **Sell before gather**: When gathering, if there are tokens left in the wallet, it sells the tokens first and gathers only SOL (the token account rent of 0.00203 SOL is reclaimed).
+- ✅ **More buys than sells**: It randomly buys twice with SOL in the wallet and sells all tokens after some time, making the number of buys twice as many as sells, thus creating more buy pressure.
+- ✅ **Jito mode in buy sell**: Jito mode is added in version 2 to make tranasctions faster when you don't have good rpc like helius or triton.
+
 
 ## Environment Variables
 
@@ -46,7 +61,7 @@ SELL_ALL_BY_TIMES=20         # Number of times to sell all tokens in sub-wallets
 SELL_PERCENT=100             # Percentage of tokens to sell from the main wallet
 
 #### TOKEN PAIR SETTING ####
-TOKEN_MINT=6VbEGuqwhjdgV9NxhMhvRkrFqXVNk53CvD7hK3C3yQS9  # Token mint address
+TOKEN_MINT=your mint_address  # Token mint address
 POOL_ID=null                  # Pool ID for the token pair
 
 TX_FEE=10                    # Transaction fee
@@ -62,8 +77,8 @@ LOG_LEVEL=info               # Logging level (info, debug, error)
 ## Usage
 1. Clone the repository
 ```
-git clone https://github.com/Lamoerey/Volume-Bot_Raydium_Solana.git
-cd volume-bot_raydium
+git clone https://github.com/cutupdev/Raydium-Volume-Bot.git
+cd Raydium-Volume-Bot
 ```
 2. Install dependencies
 ```
@@ -80,14 +95,8 @@ npm start
 ```
 
 
-## Author
+## Contact
+If you want advanced version, contact with me
 
-
-
-Twitter: [@Lamoerey](https://twitter.com/Lamoerey)
-
-
-Telegram: [@Lamoerey](https://t.me/Lamoerey)
-
-
-You can always find me here, for help, or for other projects.
+### Twitter: https://x.com/januscutup 
+### Telegram: https://t.me/DevCutup
