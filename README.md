@@ -1,6 +1,6 @@
 # Raydium Volume Bot
 
-Distribution of SOL to multiple wallets and execute automated buy and sell transactions on the Solana Raydium platform.
+This bot it designed to increase volume on solana raydium. Distribution of SOL to multiple wallets and execute automated buy and sell transactions on the Solana Raydium platform.
 
 ## It's the version for basic functions of volume bot, so I have another advanced version for big live tokens. So, if you want better version, feel free to reach out of me.
 
